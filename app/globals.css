@@ -1,26 +1,132 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------------------
+   Paleta Delta — cerrada por `tec §T1.2`.
+   Solo estos cuatro tonos más blanco.
+
+   Excepción escrita (`tec §T6`), 2026-09-17: las alfas de Carbon y Paper de
+   más abajo se usan exclusivamente para bordes, superficies de hover y texto
+   secundario. Motivo: sin ellas no hay jerarquía posible con cuatro colores.
+   No introducen un matiz nuevo ni se usan como color de marca.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-delta-navy: #04132e;
+  --color-delta-lime: #b8e83c;
+  --color-delta-carbon: #262626;
+  --color-delta-paper: #f7f5f0;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-sans);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Modo claro: Paper de fondo, Carbon de texto, Navy de acción. */
+:root {
+  --background: #f7f5f0;
+  --foreground: #262626;
+  --card: #ffffff;
+  --card-foreground: #262626;
+  --popover: #ffffff;
+  --popover-foreground: #262626;
+  --primary: #04132e;
+  --primary-foreground: #ffffff;
+  --secondary: #f7f5f0;
+  --secondary-foreground: #04132e;
+  --muted: color-mix(in srgb, #262626 6%, #ffffff);
+  --muted-foreground: color-mix(in srgb, #262626 62%, #f7f5f0);
+  --accent: #b8e83c;
+  --accent-foreground: #04132e;
+  --destructive: #04132e;
+  --border: color-mix(in srgb, #262626 14%, transparent);
+  --input: color-mix(in srgb, #262626 18%, transparent);
+  --ring: #04132e;
+  --radius: 0.5rem;
+}
+
+/* Modo oscuro: Navy de fondo, Carbon de superficie, Lime de acción. */
+.dark {
+  --background: #04132e;
+  --foreground: #f7f5f0;
+  --card: #262626;
+  --card-foreground: #f7f5f0;
+  --popover: #262626;
+  --popover-foreground: #f7f5f0;
+  --primary: #b8e83c;
+  --primary-foreground: #04132e;
+  --secondary: #262626;
+  --secondary-foreground: #f7f5f0;
+  --muted: color-mix(in srgb, #f7f5f0 8%, #04132e);
+  --muted-foreground: color-mix(in srgb, #f7f5f0 68%, #04132e);
+  --accent: #b8e83c;
+  --accent-foreground: #04132e;
+  --destructive: #b8e83c;
+  --border: color-mix(in srgb, #f7f5f0 16%, transparent);
+  --input: color-mix(in srgb, #f7f5f0 22%, transparent);
+  --ring: #b8e83c;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  /* `tec §T1.1`: foco siempre visible. Sobre Navy va en Lime; sobre Paper, en Navy. */
+  :focus-visible {
+    @apply outline-ring outline-2 outline-offset-2;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* `manual §4.4`: el eyebrow en mono y mayúsculas es marca, no decoración. */
+@layer components {
+  .delta-eyebrow {
+    @apply font-mono text-[0.6875rem] uppercase tracking-[0.12em];
+  }
+}
+
+/* `tec §T1.1`: respetar prefers-reduced-motion en toda animación. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
